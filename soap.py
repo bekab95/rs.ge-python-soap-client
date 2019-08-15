@@ -11,6 +11,7 @@ client = Client('https://services.rs.ge/WayBillService/WayBillService.asmx?WSDL'
 su="19:206322102"
 sp="123456789"
 
+# Version 1
 
 GOOD_LIST = """
 <GOODS>
@@ -25,10 +26,6 @@ GOOD_LIST = """
         <A_ID>0</A_ID>
 </GOODS>
 """
-
-goods_count = [1]
-
-ls = ["ID", "W_NAME", "UNIT_ID", "UNIT_TXT", "QUANTITY", "PRICE", "AMOUNT", "BAR_CODE", "A_ID"]
 
 TYPE = "2"
 BUYER_TIN = "12345678910"  # მყიდველის პირადი ნომერი
@@ -77,6 +74,13 @@ xml = Raw("""
        TRANSPORT_COAST, TRANSPORTER_TIN,
        STATUS, SELER_UN_ID,
        TRAN_COST_PAYER, TRANS_ID))
+
+
+# Version 2
+
+goods_count = [1]
+
+ls = ["ID", "W_NAME", "UNIT_ID", "UNIT_TXT", "QUANTITY", "PRICE", "AMOUNT", "BAR_CODE", "A_ID"]
 
 waybill = Element('WAYBILL')
 _GOOD_LIST = SubElement(waybill, 'GOODS_LIST')
@@ -149,7 +153,6 @@ _COMMENT = SubElement(waybill, 'COMMENT')
 _COMMENT.text = ""
 
 
-
 way = ET.tostring(waybill, encoding='unicode')
 
 xml = Raw("""%s""" % way)
@@ -160,12 +163,12 @@ save_waybill = client.service.save_waybill(su, sp, xml)
 
 print(save_waybill)
 
-#print(save_waybill.RESULT.STATUS)
-#print(save_waybill.RESULT.ID)
+print(save_waybill.RESULT.STATUS)
+print(save_waybill.RESULT.ID)
 
 
-#waybill_id = save_waybill.RESULT.ID
+waybill_id = save_waybill.RESULT.ID
 
-#send_waybill = client.service.send_waybill(su, sp, waybill_id) # აბრუნებს ზედნადების ნომერს
+send_waybill = client.service.send_waybill(su, sp, waybill_id) # აბრუნებს ზედნადების ნომერს
 
-#print(send_waybill)
+print(send_waybill)
