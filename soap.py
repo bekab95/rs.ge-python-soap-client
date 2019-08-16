@@ -8,10 +8,10 @@ from xml.etree import ElementTree as ET
 client = Client('https://services.rs.ge/WayBillService/WayBillService.asmx?WSDL',
                 location='https://services.rs.ge/WayBillService/WayBillService.asmx')
 
-su="19:206322102"
+su=":206322102"
 sp="123456789"
 
-# Version 1
+
 
 GOOD_LIST = """
 <GOODS>
@@ -30,8 +30,8 @@ GOOD_LIST = """
 TYPE = "2"
 BUYER_TIN = "12345678910"  # მყიდველის პირადი ნომერი
 BUYER_NAME = "კლიენტის სახელი გვარი"  # მყიველის სახელი გვარი
-START_ADDRESS = "თბილისი, რამე საწყობი"
-END_ADDRESS = "თბილისი, რამე ქუჩა"  # კლიენტის მისამართი
+START_ADDRESS = "თბილისი, გურამიშვილის გამზ. 64 საწყობი"
+END_ADDRESS = "თბილისი, ვაჟა ფშაველას 50/17"  # კლიენტის მისამართი
 TRANSPORT_COAST = "5"
 TRANSPORTER_TIN = "203836233"  # გადამზისავის საიდენტიფიკაციო
 STATUS = "0"  # 0 შენახული, 1 აქტივირებული, 2 დასრულებული
@@ -39,7 +39,7 @@ TRAN_COST_PAYER = "1"  # 1 მყიდველი, 2 გამყიდვე�
 SELER_UN_ID = "731937"
 TRANS_ID = "7"
 
-xml = Raw("""
+xml_ = Raw("""
 <WAYBILL>
     <GOODS_LIST>
     %s
@@ -75,19 +75,28 @@ xml = Raw("""
        STATUS, SELER_UN_ID,
        TRAN_COST_PAYER, TRANS_ID))
 
-
-# Version 2
-
 goods_count = [1]
 
 ls = ["ID", "W_NAME", "UNIT_ID", "UNIT_TXT", "QUANTITY", "PRICE", "AMOUNT", "BAR_CODE", "A_ID"]
 
+
+def sub_element_with_text(parent, tag, text):
+    attrib = {}
+    element = parent.makeelement(tag, attrib)
+    parent.append(element)
+    element.text = text
+    return element
+
+
 waybill = Element('WAYBILL')
+
 _GOOD_LIST = SubElement(waybill, 'GOODS_LIST')
 
 for good in goods_count:
     new = SubElement(_GOOD_LIST, 'GOODS')
     for item_name in ls:
+        el = sub_element_with_text(new, item_name, '0')
+        '''
         el = SubElement(new, '%s' % item_name)
         if item_name == "ID":
             el.text = '0'
@@ -107,6 +116,7 @@ for good in goods_count:
             el.text = '100000'
         if item_name == "A_ID":
             el.text = '0'
+        '''
 
 _ID = SubElement(waybill, 'ID')
 _ID.text = "0"
@@ -163,12 +173,12 @@ save_waybill = client.service.save_waybill(su, sp, xml)
 
 print(save_waybill)
 
-print(save_waybill.RESULT.STATUS)
-print(save_waybill.RESULT.ID)
+#print(save_waybill.RESULT.STATUS)
+#print(save_waybill.RESULT.ID)
 
 
-waybill_id = save_waybill.RESULT.ID
+#waybill_id = save_waybill.RESULT.ID
 
-send_waybill = client.service.send_waybill(su, sp, waybill_id) # აბრუნებს ზედნადების ნომერს
+#send_waybill = client.service.send_waybill(su, sp, waybill_id) # აბრუნებს ზედნადების ნომერს
 
-print(send_waybill)
+#print(send_waybill)
