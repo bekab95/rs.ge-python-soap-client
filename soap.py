@@ -34,7 +34,7 @@ START_ADDRESS = "თბილისი, "
 END_ADDRESS = "თბილისი,"  # კლიენტის მისამართი
 TRANSPORT_COAST = "5"
 TRANSPORTER_TIN = "203836233"  # გადამზისავის საიდენტიფიკაციო
-STATUS = "0"  # 0 შენახული, 1 აქტივირებული, 2 დასრულებული
+STATUS = "8"  # 0 შენახული, 1 აქტივირებული, 2 დასრულებული, 8 გადამზიდავთან გადაგზავნილი
 TRAN_COST_PAYER = "1"  # 1 მყიდველი, 2 გამყიდველი
 SELER_UN_ID = "731937"
 TRANS_ID = "7"
@@ -95,8 +95,8 @@ _GOOD_LIST = SubElement(waybill, 'GOODS_LIST')
 for good in goods_count:
     new = SubElement(_GOOD_LIST, 'GOODS')
     for item_name in ls:
-        el = sub_element_with_text(new, item_name, '0')
-        '''
+        #el = sub_element_with_text(new, item_name, '0')
+        
         el = SubElement(new, '%s' % item_name)
         if item_name == "ID":
             el.text = '0'
@@ -116,7 +116,6 @@ for good in goods_count:
             el.text = '100000'
         if item_name == "A_ID":
             el.text = '0'
-        '''
 
 _ID = SubElement(waybill, 'ID')
 _ID.text = "0"
