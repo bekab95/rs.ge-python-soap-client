@@ -99,7 +99,7 @@ for good in goods_count:
         
         el = SubElement(new, '%s' % item_name)
         if item_name == "ID":
-            el.text = '0'
+            el.text = '0' # ID must always be 0
         if item_name == "W_NAME":
             el.text = 'სახელი'
         if item_name == "UNIT_ID":
